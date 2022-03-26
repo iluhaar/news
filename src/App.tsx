@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Home from "./Components/Home";
 
 function App() {
+  const [news, setNews] = React.useState<any>([]);
+
+  const getNews = async () => {
+    await fetch(`https://newsapi.org/v2/top-headlines?country=ua&apiKey=${process.env.REACT_APP_NEWS_API}`)
+      .then((response) => response.json())
+      .then((data) => setNews(data.articles));
+  };
+  React.useEffect(() => {
+    getNews();
+    console.log(news);
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Новости Украины из newsapi</h1>
+      <Home news={news} />
     </div>
   );
 }
